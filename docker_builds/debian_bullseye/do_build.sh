@@ -21,4 +21,3 @@ make -j2
 
 cd ..
 sh make_debian_package.sh ./build
-ls -alrt
