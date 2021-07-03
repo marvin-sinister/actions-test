@@ -23,7 +23,35 @@ jobs:
           run: env
 
         - name: Create Docker Image
-          run: cd $GITHUB_WORKSPACE/docker && docker build . --tag sdrpp_build
+          run: $GITHUB_WORKSPACE/docker_builds/debian_bullseye && docker build . --tag sdrpp_build
 
         - name: Run Container
-          run: docker run --name build -v $GITHUB_WORKSPACE:/workdir --env BUILD_NO="-$GITHUB_RUN_NUMBER" sdrpp_build /entrypoint.sh
+          run: docker run --name build -v $GITHUB_WORKSPACE:/workdir --env BUILD_NO="-$GITHUB_RUN_NUMBER" sdrpp_build /root/do_build.sh
+
+        - name: Recover Deb Archive
+          working-directory: ${{runner.workspace}}
+          run: docker cp build:/root/SDRPlusPlus/sdrpp_debian_amd64.deb ./
+
+        - name: Save Deb Archive
+          uses: actions/upload-artifact@v2
+          with:
+              name: sdrpp_debian_bullseye_amd64
+              path: ${{runner.workspace}}/sdrpp_debian_amd64.deb
+
+    create_full_archive:
+        needs: ['build_debian_bullseye']
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Download All Builds
+          uses: actions/download-artifact@v2
+
+        - name: Create Archive
+          run: >
+            mkdir sdrpp_all && 
+            mv sdrpp_debian_bullseye_amd64/sdrpp_debian_amd64.deb sdrpp_all/sdrpp_debian_bullseye_amd64.deb
+
+        - uses: actions/upload-artifact@v2
+          with:
+            name: sdrpp_all
+            path: sdrpp_all
