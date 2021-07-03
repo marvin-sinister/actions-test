@@ -23,7 +23,7 @@ jobs:
           run: env
 
         - name: Create Docker Image
-          run: $GITHUB_WORKSPACE/docker_builds/debian_bullseye && docker build . --tag sdrpp_build
+          run: cd $GITHUB_WORKSPACE/docker_builds/debian_bullseye && docker build . --tag sdrpp_build
 
         - name: Run Container
           run: docker run --name build -v $GITHUB_WORKSPACE:/workdir --env BUILD_NO="-$GITHUB_RUN_NUMBER" sdrpp_build /root/do_build.sh
