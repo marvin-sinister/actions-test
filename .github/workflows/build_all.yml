@@ -1,0 +1,23 @@
+name: Build Binaries
+
+on: [push, pull_request]
+
+env:
+    # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+    BUILD_TYPE: Release
+
+jobs:
+    build_debian_bullseye:
+        runs-on: ubuntu-latest
+
+        steps:
+        - uses: actions/checkout@v2
+        
+        - name: list folders
+          run: ls -lrt
+
+        - name: list folders
+          run: ls -lrt $GITHUB_WORKSPACE
+
+        - name: get env
+          run: env
