@@ -14,10 +14,10 @@ jobs:
         - uses: actions/checkout@v2
         
         - name: list folders
-          run: ls -lrt
+          run: ls -alrt
 
         - name: list folders
-          run: ls -lrt $GITHUB_WORKSPACE
+          run: ls -alrt $GITHUB_WORKSPACE
 
         - name: get env
           run: env
